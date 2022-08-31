@@ -16,7 +16,12 @@ class WIF_Frontend {
     }
 
     public function __construct() {
+        add_action( 'wp_enqueue_scripts', [$this, 'enqueue_scripts'] );
         add_action( 'init', [$this, 'add_shortcodes'] );
+    }
+
+    public function enqueue_scripts() {
+        wp_enqueue_style( 'wif-plugin', WIF_URL . 'assets/css/main.css' );
     }
 
     public function add_shortcodes() {
@@ -24,9 +29,11 @@ class WIF_Frontend {
     }
 
     public function wif_filter_shortcode_callback( $atts ) {
+        if ( empty( $atts['id'] ) ) return;
         $template_path = WIF_DIR . 'templates/filter.php';
         if ( file_exists( $template_path ) ) {
             ob_start();
+            $filter_id = $atts['id'];
             include_once( $template_path );
             $html = ob_get_clean();
         }
