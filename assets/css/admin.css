@@ -1,0 +1,25 @@
+.wif-metabox-inner {
+  padding: 1.25em;
+}
+
+.wif-editor-textarea {
+  width: 35em;
+  height: 10em;
+  padding: 1.25em;
+}
+
+.wif-editor__panel {
+  margin-bottom: 1.25em;
+}
+
+.wif-editor__panel-options {
+  margin-bottom: 1.25em;
+}
+
+.wif-editor__panel-tool {
+  display: flex;
+}
+
+.wif-editor__panel-tool-col {
+  margin-right: 0.3125em;
+}

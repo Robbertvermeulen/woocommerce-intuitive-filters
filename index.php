@@ -5,7 +5,7 @@
  * Version: 1.0.0
  * Author: Robbert Vermeulen
  * Author URI: https://www.robbertvermmeulen.com
- * Text Domain: wif
+ * Text Domain: wif_plugin
  */
 
 /**
