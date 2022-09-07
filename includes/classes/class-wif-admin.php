@@ -22,6 +22,7 @@ class WIF_Admin {
 
     public function enqueue_scripts() {
         wp_enqueue_style( 'wif-plugin-admin', WIF_URL . 'assets/css/admin.css' );
+        wp_enqueue_script( 'wif-plugin-admin', WIF_URL . 'assets/js/admin.js', ['jquery'] );
     }
 
     public function add_meta_boxes() {
@@ -42,11 +43,11 @@ class WIF_Admin {
                 <div class="wif-editor">
                     <div class="wif-editor__panel">
                         <div class="wif-editor__panel-options">
-                            <button class="button button-secondary wif-editor__panel-option js-panel-option-button">Add category</button>
-                            <button class="button button-secondary wif-editor__panel-option js-panel-option-button">Add attribute</button>
+                            <button class="button button-secondary wif-editor__panel-option js-panel-option-button" data-target="category">Add category</button>
+                            <button class="button button-secondary wif-editor__panel-option js-panel-option-button" data-target="attribute">Add attribute</button>
                         </div>
                         <div class="js-panel-tools">
-                            <div class="wif-editor__panel-tool js-panel-tool" style="display: none;">  
+                            <div class="wif-editor__panel-tool js-panel-tool js-panel-tool-category" style="display: none;">  
                                 <div class="wif-editor__panel-tool-col">
                                     <select>
                                         <option>-- <?php _e( 'Select category' ); ?> --</option>
@@ -56,7 +57,7 @@ class WIF_Admin {
                                     <button class="button button-primary"><?php _e( 'Add' ); ?></button>
                                 </div> 
                             </div>
-                            <div class="wif-editor__panel-tool js-panel-tool" style="display: none;">  
+                            <div class="wif-editor__panel-tool js-panel-tool js-panel-tool-attribute" style="display: none;">  
                                 <div class="wif-editor__panel-tool-col">
                                     <select>
                                         <option>-- <?php _e( 'Select attribute' ); ?> --</option>
