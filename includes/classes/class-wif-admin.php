@@ -18,6 +18,7 @@ class WIF_Admin {
     public function __construct() {
         add_action( 'admin_enqueue_scripts', [$this, 'enqueue_scripts'] );
         add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
+        add_action( 'save_post_wif-filter', [$this, 'save_filter_post'] );
     }
 
     public function enqueue_scripts() {
@@ -36,9 +37,17 @@ class WIF_Admin {
         );
     }
 
-    public function filter_settings_metabox_callback() { 
+    public function save_filter_post( $post_id ) {
+
+        if ( isset( $_POST['filter_structure'] ) ) {
+            update_post_meta( $post_id, 'filter_structure', $_POST['filter_structure'] );
+        }
+    }
+
+    public function filter_settings_metabox_callback( $post ) { 
         
         $attribute_taxonomies = wc_get_attribute_taxonomies();
+        $filter_structure = get_post_meta( $post->ID, 'filter_structure', true );
         ?>
 
         <div class="wif-metabox-inner">
@@ -69,7 +78,7 @@ class WIF_Admin {
                             </div>    
                         </div>    
                     </div>
-                    <textarea class="wif-editor-textarea js-editor-textarea" placeholder="<?php _e( 'Filter structure..' ); ?>"></textarea>
+                    <textarea class="wif-editor-textarea js-editor-textarea" name="filter_structure" placeholder="<?php _e( 'Filter structure..' ); ?>"><?php echo $filter_structure; ?></textarea>
                 </div>    
             </div>
         </div>
