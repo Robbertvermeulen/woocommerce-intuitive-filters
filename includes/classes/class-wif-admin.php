@@ -36,40 +36,40 @@ class WIF_Admin {
         );
     }
 
-    public function filter_settings_metabox_callback() { ?>
+    public function filter_settings_metabox_callback() { 
+        
+        $attribute_taxonomies = wc_get_attribute_taxonomies();
+        ?>
 
         <div class="wif-metabox-inner">
             <div class="wif-metabox-row">
                 <div class="wif-editor">
                     <div class="wif-editor__panel">
                         <div class="wif-editor__panel-options">
-                            <button class="button button-secondary wif-editor__panel-option js-panel-option-button" data-target="category">Add category</button>
-                            <button class="button button-secondary wif-editor__panel-option js-panel-option-button" data-target="attribute">Add attribute</button>
+                            <button class="button button-secondary wif-editor__panel-option js-panel-option-button js-panel-option-button-add" data-tool-type="product_cat">Add categories</button>
+                            <button class="button button-secondary wif-editor__panel-option js-panel-option-button js-panel-option-button-opener" data-tool-type="attribute_taxonomy">Add attribute taxonomy</button>
                         </div>
                         <div class="js-panel-tools">
-                            <div class="wif-editor__panel-tool js-panel-tool js-panel-tool-category" style="display: none;">  
+                            <div class="wif-editor__panel-tool js-panel-tool js-panel-tool-attribute_taxonomy" data-tool-type="attribute_taxonomy" style="display: none;">  
                                 <div class="wif-editor__panel-tool-col">
-                                    <select>
-                                        <option>-- <?php _e( 'Select category' ); ?> --</option>
+                                    <select class="js-panel-tool-dropdown">
+                                        <option>-- <?php _e( 'Select attribute taxonomy' ); ?> --</option>
+                                        <?php 
+                                        if ( $attribute_taxonomies ) {
+                                            foreach ( $attribute_taxonomies as $taxonomy ) {
+                                                echo '<option value="' . $taxonomy->attribute_id . '">' . $taxonomy->attribute_label . '</option>';
+                                            }
+                                        }
+                                        ?>
                                     </select>
                                 </div>  
                                 <div class="wif-editor__panel-tool-col">
-                                    <button class="button button-primary"><?php _e( 'Add' ); ?></button>
-                                </div> 
-                            </div>
-                            <div class="wif-editor__panel-tool js-panel-tool js-panel-tool-attribute" style="display: none;">  
-                                <div class="wif-editor__panel-tool-col">
-                                    <select>
-                                        <option>-- <?php _e( 'Select attribute' ); ?> --</option>
-                                    </select>
-                                </div>  
-                                <div class="wif-editor__panel-tool-col">
-                                    <button class="button button-primary"><?php _e( 'Add' ); ?></button>
+                                    <button class="button button-primary js-panel-tool-add-button"><?php _e( 'Add' ); ?></button>
                                 </div> 
                             </div>    
                         </div>    
                     </div>
-                    <textarea class="wif-editor-textarea" placeholder="<?php _e( 'Filter structure..' ); ?>"></textarea>
+                    <textarea class="wif-editor-textarea js-editor-textarea" placeholder="<?php _e( 'Filter structure..' ); ?>"></textarea>
                 </div>    
             </div>
         </div>
