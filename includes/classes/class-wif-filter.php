@@ -13,10 +13,48 @@ class WIF_Filter {
         return get_post_meta( $this->_id, 'filter_structure', true );
     }
 
+    public function get_dropdown_options( $name ) {
+        if ( empty( $name ) ) return;
+        if ( $name === "product_cat" ) {
+            $taxonomy = $name;
+        } else {
+            $taxonomy = wc_attribute_taxonomy_name( $name );
+        }
+        $terms = get_terms([
+            'taxonomy' => $taxonomy,
+            'hide_empty' => false
+        ]);
+        return array_map( function( $term ) {
+            return [
+                'label' => $term->name,
+                'value' => $term->slug
+            ];
+        }, $terms );
+    }
+
     public function get_structure_array() {
         $structure = $this->get_structure();
         if ( empty( $structure ) ) return;
-        return explode( "{{", $structure );
+        $result = [];
+        $pattern = '/(\{\{[^}]*\}\})/';
+        $lines = preg_split( $pattern, $structure, null, PREG_SPLIT_DELIM_CAPTURE );
+        foreach ( $lines as $line ) {
+            preg_match( $pattern, $line, $matches );
+            if ( $matches ) {
+                $name = trim( str_replace( ['{{', '}}'], "", $line ) );
+                $result[] = [
+                    'type'    => 'dropdown',
+                    'name'    => $name,
+                    'options' => $this->get_dropdown_options( $name )
+                ]; 
+            } else {
+                $result[] = [
+                    'type' => "text",
+                    'content' => trim( $line )
+                ];
+            }
+        }
+        return $result;
     }
 
     public function get_text_html( array $element ) {
@@ -34,28 +72,30 @@ class WIF_Filter {
             $name = $element['name'];
             $options = $element['options'];
             $options_html = array_map( function( $option ) {
-                return '<option value="' . $option['value'] . '">' . $option['label'] . '</option>';
+                return '<option value="' . $option['value'] . '">' . strtolower( $option['label'] ) . '</option>';
             }, $options );
-            $html = '<select name="' . $name . '">' . $options_html . '</select>';
+            $html .= '<select class="wif-filter__select" name="' . $name . '">' . implode( "", $options_html ) . '</select>';
         }
         return $html;
     }
 
     public function get_html() {
-        // if ( empty( $this->_structure ) ) return;
-        // $html = '';
-        // foreach ( $this->structure as $element ) {
-        //     switch ( $element['type'] ) {
-        //         case 'text' :
-        //             $html .= $this->get_text_html( $element );
-        //             break;
-        //         case 'dropdown' : 
-        //             $html .= $this->get_dropdown_html( $element );
-        //             break;
-        //     }
-        // }
-        // return $html;   
-        var_dump( $this->_structure );
+        if ( empty( $this->_structure ) ) return;
+        $html  = '<div class="wif-filter">';
+            $html .= '<p class="wif-filter__content">';
+            foreach ( $this->_structure as $element ) {
+                switch ( $element['type'] ) {
+                    case 'text' :
+                        $html .= $this->get_text_html( $element );
+                        break;
+                    case 'dropdown' : 
+                        $html .= $this->get_dropdown_html( $element );
+                        break;
+                }
+            }
+            $html .= '</p>';
+        $html .= '</div>';
+        return $html;   
     }
 
 }
