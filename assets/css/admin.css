@@ -2,6 +2,14 @@
   padding: 1.25em;
 }
 
+.wif-metabox-row {
+  margin-bottom: 1.25em;
+}
+
+.wif-metabox-inner .wif-metabox-row:last-child {
+  margin-bottom: 0;
+}
+
 .wif-editor-textarea {
   width: 35em;
   height: 10em;

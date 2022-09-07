@@ -30,14 +30,8 @@ class WIF_Frontend {
 
     public function wif_filter_shortcode_callback( $atts ) {
         if ( empty( $atts['id'] ) ) return;
-        $template_path = WIF_DIR . 'templates/filter.php';
-        if ( file_exists( $template_path ) ) {
-            ob_start();
-            $filter_id = $atts['id'];
-            include_once( $template_path );
-            $html = ob_get_clean();
-        }
-        return $html;
+        $filter = new WIF_Filter( $atts['id'] );
+        return $filter->get_html();
     }
 
 }

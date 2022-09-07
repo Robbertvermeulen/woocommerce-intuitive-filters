@@ -66,7 +66,7 @@ class WIF_Admin {
                                         <?php 
                                         if ( $attribute_taxonomies ) {
                                             foreach ( $attribute_taxonomies as $taxonomy ) {
-                                                echo '<option value="' . $taxonomy->attribute_id . '">' . $taxonomy->attribute_label . '</option>';
+                                                echo '<option value="' . $taxonomy->attribute_name . '">' . $taxonomy->attribute_label . '</option>';
                                             }
                                         }
                                         ?>
@@ -80,6 +80,10 @@ class WIF_Admin {
                     </div>
                     <textarea class="wif-editor-textarea js-editor-textarea" name="filter_structure" placeholder="<?php _e( 'Filter structure..' ); ?>"><?php echo $filter_structure; ?></textarea>
                 </div>    
+            </div>
+            <div class="wif-metabox-row">
+                <strong><?php _e( 'Shortcode', 'wif_plugin' ); ?>:</strong>
+                <input type="text" disabled value='<?php echo '[wif_filter id="' . $post->ID . '"]'; ?>'>
             </div>
         </div>
 
