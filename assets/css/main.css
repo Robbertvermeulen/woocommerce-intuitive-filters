@@ -46,8 +46,10 @@
   background-color: #289479;
 }
 
-.wif-filter[disabled] {
+.wif-filter__submit:disabled {
+  opacity: 0.8 !important;
   background-color: #ebdfd5;
+  cursor: not-allowed;
 }
 
 .wif-filter__reset {
@@ -57,4 +59,8 @@
   font-weight: 600;
   color: #289479;
   cursor: pointer;
+}
+
+.wif-filter__reset:hover {
+  text-decoration: underline;
 }

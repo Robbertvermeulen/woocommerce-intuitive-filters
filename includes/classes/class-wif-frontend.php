@@ -23,6 +23,7 @@ class WIF_Frontend {
 
     public function enqueue_scripts() {
         wp_enqueue_style( 'wif-plugin', WIF_URL . 'assets/css/main.css' );
+        wp_enqueue_script( 'wif-plugin', WIF_URL . 'assets/js/main.js', ['jquery'] );
     }
 
     public function add_shortcodes() {

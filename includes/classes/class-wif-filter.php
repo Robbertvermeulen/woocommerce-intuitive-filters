@@ -71,7 +71,7 @@ class WIF_Filter {
         if ( ! empty( $element['name'] ) && ! empty( $element['options'] ) ) {
             $name = $element['name'];
             $options = $element['options'];
-            $options_html = ['<option value=""></option>'];
+            $options_html = ['<option disabled selected value></option>'];
             $options_html = array_merge( $options_html, array_map( function( $option ) {
                 return '<option value="' . $option['value'] . '">' . strtolower( $option['label'] ) . '</option>';
             }, $options ) );
@@ -82,21 +82,21 @@ class WIF_Filter {
 
     public function get_html() {
         if ( empty( $this->_structure ) ) return;
-        $html  = '<form class="wif-filter" method="post">';
-            $html .= '<p class="wif-filter__content">';
-            foreach ( $this->_structure as $element ) {
-                switch ( $element['type'] ) {
-                    case 'text' :
-                        $html .= $this->get_text_html( $element );
-                        break;
-                    case 'dropdown' : 
-                        $html .= $this->get_dropdown_html( $element );
-                        break;
-                }
+        $html  = '<form class="wif-filter js-wif-form" method="post">';
+        $html .= '<p class="wif-filter__content">';
+        foreach ( $this->_structure as $element ) {
+            switch ( $element['type'] ) {
+                case 'text' :
+                    $html .= $this->get_text_html( $element );
+                    break;
+                case 'dropdown' : 
+                    $html .= $this->get_dropdown_html( $element );
+                    break;
             }
-            $html .= '</p>';
-            $html .= '<button class="wif-filter__submit" name="wif_filter_submit" value="' . $this->_id . '">' . __( 'Bekijk resultaten', 'wif_plugin' ) . '</button>';
-            $html .= '<span class="wif-filter__reset">' . __( 'Begin opnieuw', 'wif_filter' ) . '</span>';
+        }
+        $html .= '</p>';
+        $html .= '<button class="wif-filter__submit js-wif-submit-button" name="wif_filter_submit" value="' . $this->_id . '" disabled>' . __( 'Bekijk resultaten', 'wif_plugin' ) . '</button>';
+        $html .= '<span class="wif-filter__reset" style="display: none;">' . __( 'Begin opnieuw', 'wif_filter' ) . '</span>';
         $html .= '</form>';
         return $html;   
     }
