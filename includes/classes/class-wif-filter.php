@@ -66,16 +66,26 @@ class WIF_Filter {
         return $html;
     }
 
+    public function is_selected( $name, $current ) {
+        if ( ! empty( $_GET[$name] ) ) {
+            $selected = $_GET[$name];
+        } elseif ( is_tax( 'product_cat', $current ) ) {
+            $selected = $current;
+        }
+        return isset( $selected ) ? selected( $selected, $current, false ) : false;
+    }
+
     public function get_dropdown_html( array $element ) {
         $html = '';
         if ( ! empty( $element['name'] ) && ! empty( $element['options'] ) ) {
             $name = $element['name'];
             $options = $element['options'];
             $options_html = ['<option disabled selected value></option>'];
-            $options_html = array_merge( $options_html, array_map( function( $option ) {
-                return '<option value="' . $option['value'] . '">' . strtolower( $option['label'] ) . '</option>';
+            $options_html = array_merge( $options_html, array_map( function( $option ) use( $name ) {
+                $selected = $this->is_selected( $name, $option['value'] );
+                return '<option value="' . $option['value'] . '"' . $selected . '>' . strtolower( $option['label'] ) . '</option>';
             }, $options ) );
-            $html .= '<select class="wif-filter__select" name="wif_filters[' . $name . ']">' . implode( "", $options_html ) . '</select>';
+            $html .= '<select class="wif-filter__select js-wif-dropdown" name="wif_filters[' . $name . ']">' . implode( "", $options_html ) . '</select>';
         }
         return $html;
     }
@@ -96,7 +106,7 @@ class WIF_Filter {
         }
         $html .= '</p>';
         $html .= '<button class="wif-filter__submit js-wif-submit-button" name="wif_filter_submit" value="' . $this->_id . '" disabled>' . __( 'Bekijk resultaten', 'wif_plugin' ) . '</button>';
-        $html .= '<span class="wif-filter__reset" style="display: none;">' . __( 'Begin opnieuw', 'wif_filter' ) . '</span>';
+        $html .= '<span class="wif-filter__reset js-wif-reset" style="display: none;">' . __( 'Begin opnieuw', 'wif_filter' ) . '</span>';
         $html .= '</form>';
         return $html;   
     }
