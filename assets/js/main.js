@@ -27,6 +27,7 @@ jQuery(document).ready(function ($) {
         const required = $(element).attr("required");
         if (required && !value) valid = false;
       });
+      console.log(valid);
       return valid;
     };
 
@@ -39,11 +40,10 @@ jQuery(document).ready(function ($) {
       }
     };
 
-    $(window).on("load", () => {
-      if ($form.length === 0) return;
+    if ($form.length > 0) {
       let valid = validateForm();
       handleFormValidity(valid);
-    });
+    }
 
     $(".js-wif-dropdown", $form).on("change", () => {
       let valid = validateForm();
