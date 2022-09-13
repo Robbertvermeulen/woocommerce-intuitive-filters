@@ -27,3 +27,34 @@
 .wif-filter__select-option {
   font-size: 1em;
 }
+
+.wif-filter__submit {
+  margin-bottom: 0.5em;
+  padding: 0.35em 1em;
+  -moz-border-radios: 4px;
+  -webkit-border-radio: 4px;
+  border-radius: 4px;
+  font-size: 1.35em;
+  background-color: #289479;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #fff;
+}
+
+.wif-filter__submit:hover {
+  color: #fff;
+  background-color: #289479;
+}
+
+.wif-filter[disabled] {
+  background-color: #ebdfd5;
+}
+
+.wif-filter__reset {
+  display: block;
+  text-transform: uppercase;
+  font-size: 1.125em;
+  font-weight: 600;
+  color: #289479;
+  cursor: pointer;
+}

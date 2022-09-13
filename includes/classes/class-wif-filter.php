@@ -44,7 +44,7 @@ class WIF_Filter {
                 $name = trim( str_replace( ['{{', '}}'], "", $line ) );
                 $result[] = [
                     'type'    => 'dropdown',
-                    'name'    => $name,
+                    'name'    => 'product_cat' != $name ? wc_attribute_taxonomy_name( $name ) : $name,
                     'options' => $this->get_dropdown_options( $name )
                 ]; 
             } else {
@@ -71,17 +71,18 @@ class WIF_Filter {
         if ( ! empty( $element['name'] ) && ! empty( $element['options'] ) ) {
             $name = $element['name'];
             $options = $element['options'];
-            $options_html = array_map( function( $option ) {
+            $options_html = ['<option value=""></option>'];
+            $options_html = array_merge( $options_html, array_map( function( $option ) {
                 return '<option value="' . $option['value'] . '">' . strtolower( $option['label'] ) . '</option>';
-            }, $options );
-            $html .= '<select class="wif-filter__select" name="' . $name . '">' . implode( "", $options_html ) . '</select>';
+            }, $options ) );
+            $html .= '<select class="wif-filter__select" name="wif_filters[' . $name . ']">' . implode( "", $options_html ) . '</select>';
         }
         return $html;
     }
 
     public function get_html() {
         if ( empty( $this->_structure ) ) return;
-        $html  = '<div class="wif-filter">';
+        $html  = '<form class="wif-filter" method="post">';
             $html .= '<p class="wif-filter__content">';
             foreach ( $this->_structure as $element ) {
                 switch ( $element['type'] ) {
@@ -94,7 +95,9 @@ class WIF_Filter {
                 }
             }
             $html .= '</p>';
-        $html .= '</div>';
+            $html .= '<button class="wif-filter__submit" name="wif_filter_submit" value="' . $this->_id . '">' . __( 'Bekijk resultaten', 'wif_plugin' ) . '</button>';
+            $html .= '<span class="wif-filter__reset">' . __( 'Begin opnieuw', 'wif_filter' ) . '</span>';
+        $html .= '</form>';
         return $html;   
     }
 

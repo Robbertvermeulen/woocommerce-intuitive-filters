@@ -18,6 +18,7 @@ class WIF_Frontend {
     public function __construct() {
         add_action( 'wp_enqueue_scripts', [$this, 'enqueue_scripts'] );
         add_action( 'init', [$this, 'add_shortcodes'] );
+        add_action( 'init', [$this, 'handle_form_submit'] );
     }
 
     public function enqueue_scripts() {
@@ -32,6 +33,25 @@ class WIF_Frontend {
         if ( empty( $atts['id'] ) ) return;
         $filter = new WIF_Filter( $atts['id'] );
         return $filter->get_html();
+    }
+
+    public function handle_form_submit() {
+
+        if ( empty( $_POST['wif_filter_submit'] ) || empty( $_POST['wif_filters'] ) ) return;
+
+        $filter_id = $_POST['wif_filter_submit'];
+        $filters   = $_POST['wif_filters'];
+
+        if ( ! empty( $filters['product_cat'] ) ) {
+            $redirect_url = get_term_link( $filters['product_cat'], 'product_cat' );
+            unset( $filters['product_cat'] );
+        } else {
+            $redirect_url = get_permalink( wc_get_page_id( 'shop' ) );
+        }
+
+        $redirect_url = add_query_arg( array_filter( $filters ), $redirect_url );
+        wp_redirect( $redirect_url );
+        exit;
     }
 
 }
