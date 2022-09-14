@@ -22,7 +22,7 @@ jQuery(document).ready(function ($) {
 
     const validateForm = () => {
       let valid = true;
-      $(".js-wif-dropdown", $form).each((i, element) => {
+      $(".js-wif-select", $form).each((i, element) => {
         const value = $(element).val();
         const required = $(element).attr("required");
         if (required && !value) valid = false;
@@ -44,9 +44,8 @@ jQuery(document).ready(function ($) {
       handleFormValidity(valid);
     }
 
-    $(".js-wif-dropdown", $form).on("change", () => {
-      let valid = validateForm();
-      handleFormValidity(valid);
+    $(".js-wif-select", $form).on("click", function () {
+      $(".js-wif-select-dropdown").fadeIn(100);
     });
 
     $resetElement.on("click", () => {

@@ -22,7 +22,7 @@ class WIF_Filter {
         }
         $terms = get_terms([
             'taxonomy' => $taxonomy,
-            'hide_empty' => true
+            'hide_empty' => false // Set later to true
         ]);
         return array_map( function( $term ) {
             return [
@@ -80,12 +80,17 @@ class WIF_Filter {
         if ( ! empty( $element['name'] ) && ! empty( $element['options'] ) ) {
             $name = $element['name'];
             $options = $element['options'];
-            $options_html = ['<option disabled selected value></option>'];
-            $options_html = array_merge( $options_html, array_map( function( $option ) use( $name ) {
+            $options_html = array_map( function( $option ) use( $name ) {
                 $selected = $this->is_selected( $name, $option['value'] );
-                return '<option value="' . $option['value'] . '"' . $selected . '>' . strtolower( $option['label'] ) . '</option>';
-            }, $options ) );
-            $html .= '<select class="wif-filter__select js-wif-dropdown" name="wif_filters[' . $name . ']">' . implode( "", $options_html ) . '</select>';
+                return '<div class="wif-filter__select-dropdown-option" data-value="' . $option['value'] . '"' . $selected . '>' . strtolower( $option['label'] ) . '</div>';
+            }, $options );
+            $html .= '
+            <div class="wif-filter__select-container">
+                <span class="wif-filter__select js-wif-select">
+                    <span class="wif-filter__select-placeholder js-wif-select-placeholder">Placeholder text</span>
+                </span>
+                <div class="wif-filter__select-dropdown js-wif-select-dropdown" style="display: none;">' . implode( "", $options_html ) . '</div> 
+            </div>';
         }
         return $html;
     }
@@ -93,7 +98,7 @@ class WIF_Filter {
     public function get_html() {
         if ( empty( $this->_structure ) ) return;
         $html  = '<form class="wif-filter js-wif-form" method="post">';
-        $html .= '<p class="wif-filter__content">';
+        $html .= '<div class="wif-filter__content">';
         foreach ( $this->_structure as $element ) {
             switch ( $element['type'] ) {
                 case 'text' :
@@ -104,7 +109,7 @@ class WIF_Filter {
                     break;
             }
         }
-        $html .= '</p>';
+        $html .= '</div>';
         $html .= '<button class="wif-filter__submit js-wif-submit-button" name="wif_filter_submit" value="' . $this->_id . '" disabled>' . __( 'Bekijk resultaten', 'wif_plugin' ) . '</button>';
         $html .= '<div><span class="wif-filter__reset js-wif-reset" style="display: none;">' . __( 'Begin opnieuw', 'wif_filter' ) . '</span></div>';
         $html .= '</form>';
