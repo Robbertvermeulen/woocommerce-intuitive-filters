@@ -14,21 +14,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _FilterDropdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FilterDropdown */ "./src/components/FilterDropdown.js");
 
 const {
-  useState
+  useState,
+  useEffect
 } = wp.element;
 
 
+const isObjectEmpty = object => {
+  return object && Object.keys(object).length;
+};
+
 const Filter = _ref => {
   let {
-    structure
+    structure,
+    initialFilters
   } = _ref;
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState(isObjectEmpty(initialFilters) && initialFilters || {});
   const [submitReady, setSubmitReady] = useState(false);
+  const [showReset, setShowReset] = useState(false);
+  useEffect(() => {
+    if (isObjectEmpty(filters)) {
+      setSubmitReady(true);
+      setShowReset(true);
+    }
+  }, [filters]);
 
   const changeHandler = (name, value) => {
+    setShowReset(true);
     setFilters(prevState => ({ ...prevState,
       [name]: value
     }));
+  };
+
+  const handleResetClick = () => {
+    setFilters({});
+    setShowReset(false);
+    setSubmitReady(false);
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -37,7 +57,7 @@ const Filter = _ref => {
     style: {
       marginBottom: "1.875em"
     }
-  }, structure === null || structure === void 0 ? void 0 : structure.map(element => {
+  }, structure === null || structure === void 0 ? void 0 : structure.map((element, i) => {
     if (!element.type) return;
 
     switch (element.type) {
@@ -48,6 +68,7 @@ const Filter = _ref => {
 
       case "dropdown":
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FilterDropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          key: i,
           name: element.name,
           options: element.options,
           changeHandler: changeHandler,
@@ -60,8 +81,9 @@ const Filter = _ref => {
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "wif-filter__submit",
     disabled: !submitReady
-  }, "Bekijk resultaten"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "wif-filter__reset"
+  }, "Bekijk resultaten"), showReset && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "wif-filter__reset",
+    onClick: handleResetClick
   }, "Begin opnieuw")));
 };
 
@@ -92,9 +114,11 @@ const FilterDropdown = _ref => {
     value,
     changeHandler
   } = _ref;
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(true); // Order options so selected option is first
 
-  const handleClick = () => {
+  options === null || options === void 0 ? void 0 : options.sort((x, y) => x.value === value ? -1 : y.value === value ? 1 : 0);
+
+  const handleClick = e => {
     setCollapsed(!collapsed);
   };
 
@@ -118,12 +142,17 @@ const FilterDropdown = _ref => {
     className: "wif-filter__select"
   }, value && ((_getSelectedOptionLab = getSelectedOptionLabel()) === null || _getSelectedOptionLab === void 0 ? void 0 : _getSelectedOptionLab.toLowerCase()) || (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "wif-filter__select-placeholder"
-  }, "Placeholder text")), !collapsed && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, "Placeholder")), !collapsed && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "wif-filter__select-dropdown"
-  }, options === null || options === void 0 ? void 0 : options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "wif-filter__select-dropdown-option",
-    onClick: () => handleOptionClick(option.value)
-  }, option === null || option === void 0 ? void 0 : option.label.toLowerCase()))));
+  }, options === null || options === void 0 ? void 0 : options.map((option, i) => {
+    const classNames = ["wif-filter__select-dropdown-option"];
+    if (option.value === value) classNames.push("wif-filter__select-dropdown-option--selected");
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      key: i,
+      className: classNames.join(" "),
+      onClick: () => handleOptionClick(option.value)
+    }, option === null || option === void 0 ? void 0 : option.label.toLowerCase());
+  })));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (FilterDropdown);
@@ -226,9 +255,14 @@ const {
 const filterContainer = document.getElementById("wif_filter");
 
 if (filterContainer) {
-  if (window.wif) {
+  var _window$wif;
+
+  if ((_window$wif = window.wif) !== null && _window$wif !== void 0 && _window$wif.structure) {
+    var _window$wif2;
+
     render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Filter__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      structure: window.wif
+      structure: window.wif.structure,
+      initialFilters: (_window$wif2 = window.wif) === null || _window$wif2 === void 0 ? void 0 : _window$wif2.initialFilters
     }), filterContainer);
   }
 }

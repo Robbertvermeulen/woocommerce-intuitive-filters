@@ -3,7 +3,10 @@ const { useState } = wp.element;
 const FilterDropdown = ({ name, options, value, changeHandler }) => {
   const [collapsed, setCollapsed] = useState(true);
 
-  const handleClick = () => {
+  // Order options so selected option is first
+  options?.sort((x, y) => (x.value === value ? -1 : y.value === value ? 1 : 0));
+
+  const handleClick = (e) => {
     setCollapsed(!collapsed);
   };
 
@@ -24,22 +27,26 @@ const FilterDropdown = ({ name, options, value, changeHandler }) => {
     <div className="wif-filter__select-container" onClick={handleClick}>
       <div className="wif-filter__select">
         {(value && getSelectedOptionLabel()?.toLowerCase()) || (
-          <span className="wif-filter__select-placeholder">
-            Placeholder text
-          </span>
+          <span className="wif-filter__select-placeholder">Placeholder</span>
         )}
       </div>
 
       {!collapsed && (
         <div className="wif-filter__select-dropdown">
-          {options?.map((option) => (
-            <div
-              className="wif-filter__select-dropdown-option"
-              onClick={() => handleOptionClick(option.value)}
-            >
-              {option?.label.toLowerCase()}
-            </div>
-          ))}
+          {options?.map((option, i) => {
+            const classNames = ["wif-filter__select-dropdown-option"];
+            if (option.value === value)
+              classNames.push("wif-filter__select-dropdown-option--selected");
+            return (
+              <div
+                key={i}
+                className={classNames.join(" ")}
+                onClick={() => handleOptionClick(option.value)}
+              >
+                {option?.label.toLowerCase()}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

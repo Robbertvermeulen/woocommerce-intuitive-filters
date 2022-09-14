@@ -58,7 +58,21 @@ class WIF_Filter {
     }
 
     public function get_html() {
-        $html  = '<script>var wif = ' . json_encode( $this->get_structure_array() ) . '</script>';
+        global $wp_query;
+        $data['structure'] = $this->get_structure_array();
+        // Product category
+        if ( is_tax( 'product_cat' ) ) {
+            $data['initialFilters']['product_cat'] = get_query_var( 'term' );
+        }
+        if ( ! empty( $_GET ) ) {
+            foreach ( $_GET as $key => $value ) {
+                // Looking for wc filters
+                if ( str_contains( $key, 'pa_' ) ) {
+                    $data['initialFilters'][$key] = $value;
+                }
+            }
+        }
+        $html  = '<script>var wif = ' . json_encode( $data ) . '</script>';
         $html .= '<div id="wif_filter"></div>';
         return $html;
     }

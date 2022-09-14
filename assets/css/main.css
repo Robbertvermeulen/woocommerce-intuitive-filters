@@ -52,6 +52,11 @@
   font-weight: 600;
   background-color: #fff;
   cursor: pointer;
+  z-index: 3;
+}
+
+.wif-filter__select-dropdown-option--selected {
+  color: #289479;
 }
 
 .wif-filter__select:focus {
