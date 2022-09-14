@@ -22,7 +22,7 @@ class WIF_Filter {
         }
         $terms = get_terms([
             'taxonomy' => $taxonomy,
-            'hide_empty' => false
+            'hide_empty' => true
         ]);
         return array_map( function( $term ) {
             return [
@@ -106,7 +106,7 @@ class WIF_Filter {
         }
         $html .= '</p>';
         $html .= '<button class="wif-filter__submit js-wif-submit-button" name="wif_filter_submit" value="' . $this->_id . '" disabled>' . __( 'Bekijk resultaten', 'wif_plugin' ) . '</button>';
-        $html .= '<span class="wif-filter__reset js-wif-reset" style="display: none;">' . __( 'Begin opnieuw', 'wif_filter' ) . '</span>';
+        $html .= '<div><span class="wif-filter__reset js-wif-reset" style="display: none;">' . __( 'Begin opnieuw', 'wif_filter' ) . '</span></div>';
         $html .= '</form>';
         return $html;   
     }

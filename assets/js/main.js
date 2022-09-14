@@ -27,7 +27,6 @@ jQuery(document).ready(function ($) {
         const required = $(element).attr("required");
         if (required && !value) valid = false;
       });
-      console.log(valid);
       return valid;
     };
 
