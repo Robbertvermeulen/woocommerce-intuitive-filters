@@ -36,6 +36,10 @@ jQuery(document).ready(function ($) {
     e.preventDefault();
     const name = $(this).data("tool-type");
     addShortCodeToTextArea(name);
+  }).on("change", ".js-category-mode-selector", function (e) {
+    const mode = $("option:selected", this).data("category-mode");
+    $(".js-category-mode-element").hide();
+    $(".js-category-mode-" + mode).show();
   });
 });
 /******/ })()

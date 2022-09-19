@@ -1,9 +1,17 @@
-.wif-metabox-inner {
-  padding: 1.25em;
+.mb {
+  margin-bottom: 1.25em;
 }
 
-.wif-metabox-row {
-  margin-bottom: 1.25em;
+.mb-1 {
+  margin-bottom: 0.5em;
+}
+
+.d-block {
+  display: block;
+}
+
+.wif-metabox-inner {
+  padding: 1.25em;
 }
 
 .wif-metabox-inner .wif-metabox-row:last-child {
