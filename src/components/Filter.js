@@ -1,11 +1,13 @@
 const { useState, useEffect } = wp.element;
+import axios from "axios";
+import qs from "qs";
 import FilterDropdown from "./FilterDropdown";
 
 const isObjectEmpty = (object) => {
   return object && Object.keys(object).length;
 };
 
-const Filter = ({ structure, initialFilters }) => {
+const Filter = ({ filterId, structure, initialFilters }) => {
   const [filters, setFilters] = useState(
     (isObjectEmpty(initialFilters) && initialFilters) || {}
   );
@@ -28,6 +30,26 @@ const Filter = ({ structure, initialFilters }) => {
     setFilters({});
     setShowReset(false);
     setSubmitReady(false);
+  };
+
+  const handleSubmit = async () => {
+    if (submitReady) {
+      try {
+        const response = await axios.post(
+          window.wif_plugin.ajaxUrl,
+          qs.stringify({
+            action: "handle_submit_filter",
+            filters,
+            filter_id: filterId,
+          })
+        );
+        if (response.data.redirect_url) {
+          window.location.replace(response.data.redirect_url);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
   };
 
   return (
@@ -55,7 +77,11 @@ const Filter = ({ structure, initialFilters }) => {
           }
         })}
       </div>
-      <button className="wif-filter__submit" disabled={!submitReady}>
+      <button
+        className="wif-filter__submit"
+        disabled={!submitReady}
+        onClick={handleSubmit}
+      >
         Bekijk resultaten
       </button>
       {showReset && (

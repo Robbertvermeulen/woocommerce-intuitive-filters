@@ -59,6 +59,7 @@ class WIF_Filter {
 
     public function get_html() {
         global $wp_query;
+        $data['filterId'] = $this->_id;
         $data['structure'] = $this->get_structure_array();
         // Product category
         if ( is_tax( 'product_cat' ) ) {

@@ -39,6 +39,7 @@ class WIF_Loader {
         include_once WIF_DIR . 'includes/classes/class-wif-core.php';
         include_once WIF_DIR . 'includes/classes/class-wif-filter.php';
         include_once WIF_DIR . 'includes/classes/class-wif-frontend.php';
+        include_once WIF_DIR . 'includes/classes/class-wif-backend.php';
         if ( is_admin() ) {
             include_once WIF_DIR . 'includes/classes/class-wif-admin.php';
         }

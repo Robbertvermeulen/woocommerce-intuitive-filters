@@ -6,6 +6,7 @@ if (filterContainer) {
   if (window.wif?.structure) {
     render(
       <Filter
+        filterId={window.wif?.filterId}
         structure={window.wif.structure}
         initialFilters={window.wif?.initialFilters}
       />,

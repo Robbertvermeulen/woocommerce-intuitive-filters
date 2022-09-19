@@ -5,5 +5,9 @@
   "scripts": {
     "build": "wp-scripts build",
     "start": "wp-scripts start"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "qs": "^6.11.0"
   }
 }
