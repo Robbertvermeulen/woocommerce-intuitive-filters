@@ -33,7 +33,13 @@ class WIF_Backend {
             $redirect_url = get_term_link( $filters['product_cat'], 'product_cat' );
             unset( $filters['product_cat'] );
         } else {
-            $redirect_url = get_permalink( wc_get_page_id( 'shop' ) );
+            $filter = new WIF_Filter( $filter_id );
+            if ( $filter->get_category_mode() == 'default' ) {
+                $product_cat = $filter->get_default_product_cat();
+                $redirect_url = get_term_link( $product_cat, 'product_cat' );
+            } else {
+                $redirect_url = get_permalink( wc_get_page_id( 'shop' ) );
+            }
         }
 
         $response['redirect_url'] = add_query_arg( array_filter( $filters ), $redirect_url );

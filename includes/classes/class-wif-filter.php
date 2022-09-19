@@ -3,27 +3,61 @@ class WIF_Filter {
 
     protected $_id;
     protected $_structure;
+    protected $_category_mode;
+    protected $_default_product_cat;
+    protected $_product_cat_selection;
 
     public function __construct( int $filter_id ) {
         $this->_id = $filter_id;
         $this->_structure = $this->get_structure_array();
+        $this->_category_mode = get_post_meta( $filter_id, 'filter_category_mode', true );
+        $this->_default_product_cat = get_post_meta( $filter_id, 'filter_default_product_cat', true );
+        $this->_product_cat_selection = get_post_meta( $filter_id, 'filter_product_cat_selection', true );
     }
 
     public function get_structure() {
         return get_post_meta( $this->_id, 'filter_structure', true );
     }
 
+    public function get_category_mode() {
+        return $this->_category_mode;
+    }
+
+    public function get_default_product_cat() {
+        return $this->_default_product_cat;
+    }
+
     public function get_dropdown_options( $name ) {
         if ( empty( $name ) ) return;
-        if ( $name === "product_cat" ) {
+        if ( $name === 'product_cat' ) {
             $taxonomy = $name;
         } else {
             $taxonomy = wc_attribute_taxonomy_name( $name );
         }
-        $terms = get_terms([
+        
+        $args = [
             'taxonomy' => $taxonomy,
-            'hide_empty' => false // Set later to true
-        ]);
+            'hide_empty' => false 
+        ];
+
+        if ( $name === 'product_cat' && $this->_category_mode ) {
+            switch ( $this->_category_mode ) {
+                case 'default' :
+                    if ( $this->_default_product_cat ) {
+                        $args['include'] = [$this->_default_product_cat];
+                    }
+                    break;
+                case 'selection' :
+                    if ( $this->_product_cat_selection ) {
+                        $args['include'] = $this->_product_cat_selection;
+                    }
+                    break;    
+                default:    
+            }
+        }
+
+        $terms = get_terms( $args );
+
         return array_map( function( $term ) {
             return [
                 'label' => $term->name,
