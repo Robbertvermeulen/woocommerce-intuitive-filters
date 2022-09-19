@@ -1,10 +1,22 @@
-const { useState } = wp.element;
+const { useState, useRef, useEffect } = wp.element;
 
 const FilterDropdown = ({ name, options, value, changeHandler }) => {
+  const ref = useRef(null);
   const [collapsed, setCollapsed] = useState(true);
 
   // Order options so selected option is first
   options?.sort((x, y) => (x.value === value ? -1 : y.value === value ? 1 : 0));
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target) && !collapsed)
+        setCollapsed(true);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref, collapsed]);
 
   const handleClick = (e) => {
     setCollapsed(!collapsed);
@@ -24,7 +36,11 @@ const FilterDropdown = ({ name, options, value, changeHandler }) => {
   };
 
   return (
-    <div className="wif-filter__select-container" onClick={handleClick}>
+    <div
+      ref={ref}
+      className="wif-filter__select-container"
+      onClick={handleClick}
+    >
       <div className="wif-filter__select">
         {(value && getSelectedOptionLabel()?.toLowerCase()) || (
           <span className="wif-filter__select-placeholder">Placeholder</span>

@@ -102,7 +102,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 
 const {
-  useState
+  useState,
+  useRef,
+  useEffect
 } = wp.element;
 
 const FilterDropdown = _ref => {
@@ -114,9 +116,20 @@ const FilterDropdown = _ref => {
     value,
     changeHandler
   } = _ref;
+  const ref = useRef(null);
   const [collapsed, setCollapsed] = useState(true); // Order options so selected option is first
 
   options === null || options === void 0 ? void 0 : options.sort((x, y) => x.value === value ? -1 : y.value === value ? 1 : 0);
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (ref.current && !ref.current.contains(event.target) && !collapsed) setCollapsed(true);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref, collapsed]);
 
   const handleClick = e => {
     setCollapsed(!collapsed);
@@ -136,6 +149,7 @@ const FilterDropdown = _ref => {
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ref: ref,
     className: "wif-filter__select-container",
     onClick: handleClick
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
