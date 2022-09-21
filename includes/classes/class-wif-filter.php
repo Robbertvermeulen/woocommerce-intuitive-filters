@@ -24,7 +24,7 @@ class WIF_Filter {
     }
 
     public function get_default_product_cat() {
-        return $this->_default_product_cat;
+        return is_string( $this->_default_product_cat ) ? intval( $this->_default_product_cat ) : $this->_default_product_cat;
     }
 
     public function get_dropdown_options( $name ) {
@@ -37,7 +37,7 @@ class WIF_Filter {
         
         $args = [
             'taxonomy' => $taxonomy,
-            'hide_empty' => false 
+            'hide_empty' => true 
         ];
 
         if ( $name === 'product_cat' && $this->_category_mode ) {
