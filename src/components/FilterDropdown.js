@@ -5,7 +5,10 @@ const FilterDropdown = ({ name, options, value, changeHandler }) => {
   const [collapsed, setCollapsed] = useState(true);
 
   // Order options so selected option is first
-  options?.sort((x, y) => (x.value === value ? -1 : y.value === value ? 1 : 0));
+  if (options && options.length > 0)
+    options?.sort((x, y) =>
+      x.value === value ? -1 : y.value === value ? 1 : 0
+    );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -49,20 +52,21 @@ const FilterDropdown = ({ name, options, value, changeHandler }) => {
 
       {!collapsed && (
         <div className="wif-filter__select-dropdown">
-          {options?.map((option, i) => {
-            const classNames = ["wif-filter__select-dropdown-option"];
-            if (option.value === value)
-              classNames.push("wif-filter__select-dropdown-option--selected");
-            return (
-              <div
-                key={i}
-                className={classNames.join(" ")}
-                onClick={() => handleOptionClick(option.value)}
-              >
-                {option?.label.toLowerCase()}
-              </div>
-            );
-          })}
+          {options &&
+            options.map((option, i) => {
+              const classNames = ["wif-filter__select-dropdown-option"];
+              if (option.value === value)
+                classNames.push("wif-filter__select-dropdown-option--selected");
+              return (
+                <div
+                  key={i}
+                  className={classNames.join(" ")}
+                  onClick={() => handleOptionClick(option.value)}
+                >
+                  {option?.label.toLowerCase()}
+                </div>
+              );
+            })}
         </div>
       )}
     </div>

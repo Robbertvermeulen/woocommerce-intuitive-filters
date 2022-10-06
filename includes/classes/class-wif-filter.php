@@ -58,12 +58,15 @@ class WIF_Filter {
 
         $terms = get_terms( $args );
 
-        return array_map( function( $term ) {
-            return [
-                'label' => $term->name,
-                'value' => $term->slug
-            ];
-        }, $terms );
+        if ( !is_wp_error( $terms ) ) {
+            return array_map( function( $term ) {
+                return [
+                    'label' => $term->name,
+                    'value' => $term->slug
+                ];
+            }, $terms );
+        }
+        return false;
     }
 
     public function get_structure_array() {
@@ -71,7 +74,7 @@ class WIF_Filter {
         if ( empty( $structure ) ) return;
         $result = [];
         $pattern = '/(\{\{[^}]*\}\})/';
-        $lines = preg_split( $pattern, $structure, null, PREG_SPLIT_DELIM_CAPTURE );
+        $lines = preg_split( $pattern, $structure, 0, PREG_SPLIT_DELIM_CAPTURE );
         foreach ( $lines as $line ) {
             preg_match( $pattern, $line, $matches );
             if ( $matches ) {
