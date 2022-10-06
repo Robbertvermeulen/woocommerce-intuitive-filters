@@ -37,7 +37,7 @@ class WIF_Filter {
         
         $args = [
             'taxonomy' => $taxonomy,
-            'hide_empty' => true 
+            'hide_empty' => true
         ];
 
         if ( $name === 'product_cat' && $this->_category_mode ) {

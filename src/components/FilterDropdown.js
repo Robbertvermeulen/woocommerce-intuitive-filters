@@ -53,6 +53,7 @@ const FilterDropdown = ({ name, options, value, changeHandler }) => {
       {!collapsed && (
         <div className="wif-filter__select-dropdown">
           {options &&
+            options.length > 0 &&
             options.map((option, i) => {
               const classNames = ["wif-filter__select-dropdown-option"];
               if (option.value === value)
