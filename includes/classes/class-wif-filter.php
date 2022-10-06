@@ -59,12 +59,14 @@ class WIF_Filter {
         $terms = get_terms( $args );
 
         if ( !is_wp_error( $terms ) ) {
-            return array_map( function( $term ) {
+            return array_values( array_filter( array_map( function( $term ) {
                 return [
                     'label' => $term->name,
                     'value' => $term->slug
                 ];
-            }, $terms );
+            }, $terms ), function( $term ) {
+                return ! in_array( $term['value'], ['uncategorized', 'geen-categorie'] );
+            }));
         }
         return false;
     }
