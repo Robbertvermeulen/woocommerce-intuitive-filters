@@ -44,7 +44,7 @@ const Filter = ({ filterId, structure, initialFilters }) => {
           })
         );
         if (response.data.redirect_url) {
-          window.location.replace(response.data.redirect_url);
+          window.location.href = response.data.redirect_url;
         }
       } catch (err) {
         console.error(err);
