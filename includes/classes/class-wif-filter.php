@@ -61,7 +61,7 @@ class WIF_Filter {
         if ( !is_wp_error( $terms ) ) {
             return array_values( array_filter( array_map( function( $term ) {
                 return [
-                    'label' => $term->name,
+                    'label' => htmlspecialchars_decode( $term->name ),
                     'value' => $term->slug
                 ];
             }, $terms ), function( $term ) {
